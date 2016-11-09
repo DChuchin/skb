@@ -5,10 +5,8 @@ const app = express();
 app.use(cors());
 
 app.get('/', (req, res)=> {
-  const a =  req.query.a | 0,
-        b = req.query.b | 0,
-      sum = +a + +b;
-  res.status(200).send(sum.toString());
+  const fullName= req.query.fullname;
+  res.status(200).send(fullName);
 });
 
 app.listen(3000, ()=> {
