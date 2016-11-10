@@ -5,23 +5,34 @@ const app = express();
 app.use(cors());
 
 app.get('/', (req, res)=> {
-  const fullName= req.query.fullname.split(' ').reverse();
+  const fullName= req.query.fullname.trim().split(/\s+/).reverse();
   const [lastName, secondName, firstName] = fullName;
   let result;
 
-  if ((fullName.length > 3)||(!fullName.length)||(!lastName)) {
+  if ((fullName.length > 3)||(!fullName.length)||(!lastName)||(!isValid(fullName))) {
     result = 'Invalid fullname';
   } else {
-    result = lastName + ' ' + cutName(firstName) + cutName(secondName);
+    result = capitalize(lastName.toLowerCase()) + ' ' + cutName(firstName) + cutName(secondName);
   }
   console.log(fullName);
   console.log(result);
   res.status(200).send(result.trim());
 });
 
+function isValid(arr) {
+  return !arr.some(item => {
+    return !!~item.search(/[\d\-\_\!\?\(\)\/\\]/);
+  })
+};
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 function cutName(str) {
-  return str ? str[0]+ '. ': '';
-}
+  return str ? str[0].toUpperCase() + '. ': '';
+};
+
 app.listen(3000, ()=> {
   console.log('listening port 3000');
-})
+});
