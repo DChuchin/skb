@@ -6,8 +6,12 @@ const cors = require('cors');
 app.use(cors());
 
 app.get('/*', (req, res)=> {
-  let name = '@' + req.url.split('/').reverse()[0];
-  res.status(200).send(name);
+  if (req.query.username){
+    let name = req.query.username.split('/').reverse()[0];
+    let result = name[0]=='@' ? name : '@' + name;
+    res.status(200).send(result);
+  } else
+  res.status(200).send('Invalid username');
 });
 
 app.listen(3000, ()=> {
